@@ -1,21 +1,21 @@
 'use client'
 
-import { useState, useEffect } from "react"
-import { Button, Card, CardActionArea, CardContent, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Paper, TextField, Typography, Box } from "@mui/material"
-import { useUser } from "@clerk/nextjs"
-import { collection, doc, getDoc, writeBatch } from "firebase/firestore"
-import { useRouter } from "next/navigation"
-import { db } from "@/firebase"
+import { useState, useEffect } from "react";
+import { Button, Card, CardActionArea, CardContent, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Paper, TextField, Typography, Box } from "@mui/material";
+import { useUser } from "@clerk/nextjs";
+import { collection, doc, getDoc, writeBatch } from "firebase/firestore";
+import { useRouter } from "next/navigation";
+import { db } from "@/firebase";
 
 export default function Generate() {
-    const { isLoaded, isSignedIn, user } = useUser()
-    const [flashcards, setFlashcards] = useState([])
-    const [flipped, setFlipped] = useState({})
-    const [text, setText] = useState('')
-    const [name, setName] = useState('')
-    const [open, setOpen] = useState(false)
-    const [isMounted, setIsMounted] = useState(false)
-    const router = useRouter()
+    const { isLoaded, isSignedIn, user } = useUser();
+    const [flashcards, setFlashcards] = useState([]);
+    const [flipped, setFlipped] = useState({});
+    const [text, setText] = useState('');
+    const [name, setName] = useState('');
+    const [open, setOpen] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         setIsMounted(true);
@@ -28,15 +28,15 @@ export default function Generate() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ query: text }), 
+                body: JSON.stringify({ query: text }),
             });
-    
+
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-    
+
             const data = await response.json();
-    
+            
             if (data.flashcards && Array.isArray(data.flashcards)) {
                 setFlashcards(data.flashcards.map((item) => ({
                     front: item.front,
@@ -48,22 +48,22 @@ export default function Generate() {
         } catch (error) {
             console.error('Error fetching data:', error);
         }
-    };       
+    };
 
     const handleCardClick = (index) => {
         setFlipped((prev) => ({
             ...prev,
             [index]: !prev[index],
-        }))
-    }
+        }));
+    };
 
     const handleOpen = () => {
         setOpen(true);
-    }
+    };
 
     const handleClose = () => {
         setOpen(false);
-    }
+    };
 
     const saveFlashcards = async () => {
         if (!name) {
@@ -97,7 +97,7 @@ export default function Generate() {
         await batch.commit();
         handleClose();
         router.push('/flashcards');
-    }
+    };
 
     return (
         <Container maxWidth="md">
@@ -135,14 +135,12 @@ export default function Generate() {
 
             {flashcards.length > 0 && (
                 <Box sx={{ mt: 4 }}>
-                    <Typography variant="h5">Flashcard Preview</Typography>
+                    <Typography variant="h5">Flashcards Preview</Typography>
                     <Grid container spacing={3}>
                         {flashcards.map((flashcard, index) => (
                             <Grid item xs={12} sm={6} md={4} key={index}>
                                 <Card>
-                                    <CardActionArea onClick={() => {
-                                        handleCardClick(index)
-                                    }}>
+                                    <CardActionArea onClick={() => handleCardClick(index)}>
                                         <CardContent>
                                             <Box sx={{
                                                 perspective: '1000px',
@@ -224,5 +222,5 @@ export default function Generate() {
                 </DialogActions>
             </Dialog>
         </Container>
-    )
+    );
 }
