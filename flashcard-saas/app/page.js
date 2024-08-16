@@ -1,3 +1,5 @@
+'use client'
+
 import Head from 'next/head';
 import Image from "next/image";
 // import styles from "./page.module.css";
@@ -6,6 +8,31 @@ import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { AppBar, Button, Container, Toolbar, Typography, Box, Grid } from "@mui/material";
 
 export default function Home() {
+
+  const handleSubmit = async () => {
+    const checkoutSession = await fetch('/api/checkout_session', {
+      method: "POST",
+      headers:{
+        origin: 'https://localhost:3000'          //change this url once the project is deployed
+      },
+    })
+
+    const checkoutSessionJson = await checkoutSession.json()
+
+    if (checkoutSession.statusCode === 500){
+      console.error(checkoutSession.message)
+      return
+    }
+
+    const stripe = await getStripe()
+    const {error} = await stripe.redirectToCheckout({
+      sessionId: checkoutSessionJson.id
+    })
+
+    if(error) {
+      console.log(error.message)
+    }
+  }
   return (
     <Container maxWidth="100vw">
       <Head>
@@ -84,7 +111,7 @@ export default function Home() {
               {' '}
               Access to basic flashcard features and limited storage.
             </Typography>
-            <Button variant="contained" color="primary" sx={{mt: 2}}>Choose Plan</Button>
+            <Button variant="contained" color="primary" sx={{mt: 2}} onClick={handleSubmit}>Choose Plan</Button>
             </Box>
           </Grid>
       
@@ -101,7 +128,7 @@ export default function Home() {
               {' '}
               Access to Unlimited flashcards and storage with priority support.
             </Typography>
-            <Button variant="contained" color="primary" sx={{mt: 2}}>Choose Plan</Button>
+            <Button variant="contained" color="primary" sx={{mt: 2}} onClick={handleSubmit}>Choose Plan</Button>
             </Box>
           </Grid>
         </Grid>
