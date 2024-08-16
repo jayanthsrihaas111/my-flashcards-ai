@@ -19,6 +19,7 @@
     "firebase": "^10.12.5",
     "groq": "^3.54.0",
     "next": "14.2.5",
+    "node-fetch": "^3.3.2",
     "openai": "^4.55.5",
     "react": "^18",
     "react-dom": "^18",
