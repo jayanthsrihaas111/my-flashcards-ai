@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Button, Card, CardActionArea, CardContent, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Paper, TextField, Typography, Box } from "@mui/material";
 import { useUser } from "@clerk/nextjs";
-import { collection, doc, getDoc, writeBatch } from "firebase/firestore";
+import { collection, doc, getDoc, writeBatch, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { db } from "@/firebase";
 
@@ -190,7 +190,7 @@ export default function Generate() {
 
                     <Box mt={4} display="flex" justifyContent="center">
                         <Button variant="contained" color="secondary" onClick={handleOpen}>
-                            Save Flashcards
+                            Save
                         </Button>
                     </Box>
                 </Box>

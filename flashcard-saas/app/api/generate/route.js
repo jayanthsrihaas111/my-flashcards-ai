@@ -3,7 +3,7 @@ import fetch from 'node-fetch'; // or any other HTTP client
 import Groq from "groq-sdk";
 
 const systemPrompt = `
-You are a flashcard creator. Your task is to generate concise and effective flashcards based on the given topic or content. Follow these guidelines:
+You are a flashcard creator. Your task is to generate concise and effective flashcards based on the given topic or content. Your task is to generate flashcards for a given topic, regardless of how the topic is capitalized. Whether the input is 'java', 'Java', or 'JAVA', you should treat it the same way and generate the appropriate flashcards. Follow these guidelines:
 1. Create clear and concise questions for the front of the flashcard.
 2. Provide accurate and informative answers for the back of the flashcard.
 3. Ensure that each flash card focuses on a single concept or piece of information.
