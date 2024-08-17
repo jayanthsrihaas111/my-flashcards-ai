@@ -39,7 +39,7 @@ const ResultPage = () => {
         return (
             <Container maxWidth="100vw" sx={{ textAlign: 'center', mt: 4 }}>
                 <CircularProgress />
-                <Typography variant="h6">Loading...</Typography>
+                <Typography variant="h6" color={'#F4F4F9'}>Loading...</Typography>
             </Container>
         )
     }
@@ -47,7 +47,7 @@ const ResultPage = () => {
     if (error) {
         return (
             <Container maxWidth="100vw" sx={{ textAlign: 'center', mt: 4 }}>
-                <Typography variant="h6">
+                <Typography variant="h6" color={'#F4F4F9'}>
                     {error}
                 </Typography>
             </Container>
@@ -59,20 +59,20 @@ const ResultPage = () => {
             {
                 session?.payment_status === "paid" ? (
                     <>
-                        <Typography variant="h4">Thank you for purchasing!!!</Typography>
+                        <Typography variant="h4" color={'#F4F4F9'}>Thank you for purchasing!!!</Typography>
                         <Box sx={{ mt: 2 }}>
-                            <Typography variant="h6"> Session ID: {session_id} </Typography>
-                            <Typography variant="body1">
+                            <Typography variant="h6" color={'#F4F4F9'}> Session ID: {session_id} </Typography>
+                            <Typography color={'#F4F4F9'} variant="body1">
                                 We have received your payment. You will receive an email with the order details shortly.
                             </Typography>
                         </Box>
                     </>
                 ) : (
                     <>
-                        <Typography variant="h4">Payment Failed</Typography>
+                        <Typography color={'#F4F4F9'} variant="h4">Payment Failed</Typography>
                         <Box sx={{ mt: 2 }}>
-                            <Typography variant="h6"> Session ID: {session_id} </Typography>
-                            <Typography variant="body1">
+                            <Typography variant="h6" color={'#F4F4F9'}> Session ID: {session_id} </Typography>
+                            <Typography variant="body1" color={'#F4F4F9'}>
                                 Unfortunately, your payment was not successful. Please try again.
                             </Typography>
                         </Box>

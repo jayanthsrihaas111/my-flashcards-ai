@@ -3,30 +3,41 @@ import { NextResponse } from "next/server";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-const formatAmountForStripe = (amount, currency) => {
+const formatAmountForStripe = (amount) => {
   return Math.round(amount * 100);
 };
 
-// Single GET function to handle session retrieval
-export async function GET(req) {
-  const searchParams = req.nextUrl.searchParams;
-  const session_id = searchParams.get('session_id');
+export async function POST(req) {
+  let plan;
 
   try {
-    if (!session_id) {
-      throw new Error('Session ID is required');
+    const body = await req.json();
+
+    // Ensure body is not empty
+    if (!body || typeof body !== 'object') {
+      throw new Error('Request body is empty or invalid');
     }
 
-    const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);
-    return NextResponse.json(checkoutSession);
-  } catch (error) {
-    console.error('Error retrieving checkout session:', error);
-    return NextResponse.json({ error: { message: error.message } }, { status: 500 });
-  }
-}
+    plan = body.plan;
 
-// POST function to create a checkout session
-export async function POST(req) {
+    if (!plan) {
+      throw new Error('Plan is required');
+    }
+  } catch (error) {
+    console.error('Error parsing JSON or missing plan:', error.message);
+    return NextResponse.json({ error: { message: 'Invalid request body' } }, { status: 400 });
+  }
+
+  // Determine price based on the plan
+  let price;
+  if (plan === 'basic') {
+    price = formatAmountForStripe(3.99); // $3.99 for Basic
+  } else if (plan === 'pro') {
+    price = formatAmountForStripe(7.99); // $7.99 for Pro
+  } else {
+    return NextResponse.json({ error: { message: 'Invalid plan selected' } }, { status: 400 });
+  }
+
   const params = {
     mode: 'subscription',
     payment_method_types: ['card'],
@@ -35,9 +46,9 @@ export async function POST(req) {
         price_data: {
           currency: 'usd',
           product_data: {
-            name: 'Pro subscription',
+            name: `${plan.charAt(0).toUpperCase() + plan.slice(1)} subscription`,
           },
-          unit_amount: formatAmountForStripe(10, 'usd'), // $10.00
+          unit_amount: price,
           recurring: {
             interval: 'month',
             interval_count: 1,
@@ -54,7 +65,7 @@ export async function POST(req) {
     const checkoutSession = await stripe.checkout.sessions.create(params);
     return NextResponse.json(checkoutSession, { status: 200 });
   } catch (error) {
-    console.error('Error creating checkout session:', error);
+    console.error('Error creating checkout session:', error.message);
     return NextResponse.json({ error: { message: error.message } }, { status: 500 });
   }
 }

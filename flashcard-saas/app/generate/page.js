@@ -6,6 +6,7 @@ import { useUser } from "@clerk/nextjs";
 import { collection, doc, getDoc, writeBatch, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { db } from "@/firebase";
+import NavBar from "../NavBar/page";
 
 export default function Generate() {
     const { isLoaded, isSignedIn, user } = useUser();
@@ -101,17 +102,20 @@ export default function Generate() {
 
     return (
         <Container maxWidth="md">
+        <NavBar />
+
             <Box sx={{
                 mt: 4,
                 mb: 6,
                 display: 'flex',
                 flexDirection: 'column',
-                alignItems: 'center'
+                alignItems: 'center',
+                color: '#ffffff',
             }}>
                 <Typography variant="h4">
                     Generate Flashcards
                 </Typography>
-                <Paper sx={{ p: 4, width: "100%", }}>
+                <Paper sx={{ p: 4, width: "100%", backgroundColor: '#586f7c', borderRadius: 5, }}>
                     <TextField
                         value={text}
                         onChange={(e) => setText(e.target.value)}
@@ -124,7 +128,18 @@ export default function Generate() {
                     />
                     <Button
                         variant="contained"
-                        color="primary"
+                        sx={{
+                            mt: 2,
+                            backgroundColor: '#2f4550', // Button color
+                            color: '#ffffff',
+                            transition: 'background-color 0.3s ease, transform 0.3s ease',
+                            borderRadius: 5,
+                            '&:hover': {
+                                backgroundColor: '#b8dbd9',
+                                transform: 'scale(1.05)', // Slightly enlarge the button
+                                borderRadius: 3,
+                            },
+                        }}
                         onClick={handleSubmit}
                         fullWidth
                     >
@@ -135,11 +150,11 @@ export default function Generate() {
 
             {flashcards.length > 0 && (
                 <Box sx={{ mt: 4 }}>
-                    <Typography variant="h5">Flashcards Preview</Typography>
+                    <Typography variant="h5"color={'#ffffff'} sx={{mb: 3}}>Flashcards Preview</Typography>
                     <Grid container spacing={3}>
                         {flashcards.map((flashcard, index) => (
                             <Grid item xs={12} sm={6} md={4} key={index}>
-                                <Card>
+                                <Card sx={{backgroundColor: '#B8DBD9', borderRadius: 2, }}>
                                     <CardActionArea onClick={() => handleCardClick(index)}>
                                         <CardContent>
                                             <Box sx={{
@@ -151,7 +166,9 @@ export default function Generate() {
                                                     width: '100%',
                                                     height: '200px',
                                                     boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
-                                                    transform: flipped[index] ? 'rotateY(180deg)' : 'rotateY(0deg)'
+                                                    transform: flipped[index] ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                                                    backgroundColor: '#D6E8E9',
+                                                    borderRadius: 2,
                                                 },
                                                 '& > div > div': {
                                                     position: 'absolute',
@@ -189,7 +206,19 @@ export default function Generate() {
                     </Grid>
 
                     <Box mt={4} display="flex" justifyContent="center">
-                        <Button variant="contained" color="secondary" onClick={handleOpen}>
+                        <Button variant="contained"
+                        sx={{
+                            mt: 2,
+                            backgroundColor: '#2f4550', // Button color
+                            color: '#ffffff',
+                            transition: 'background-color 0.3s ease, transform 0.3s ease',
+                            borderRadius: 5,
+                            mb: 5,
+                            '&:hover': {
+                                backgroundColor: '#b8dbd9',
+                                transform: 'scale(1.05)', // Slightly enlarge the button
+                                borderRadius: 3,
+                            },}} onClick={handleOpen}>
                             Save
                         </Button>
                     </Box>

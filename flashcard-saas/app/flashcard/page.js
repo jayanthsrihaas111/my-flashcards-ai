@@ -8,6 +8,7 @@ import {db} from '@/firebase'
 import { useSearchParams } from "next/navigation"
 
 import { Button, Card, CardActionArea, CardContent, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Paper, TextField, Typography, Box } from "@mui/material";
+import NavBar from "../NavBar/page"
 
 export default function Flashcard() {
     const { isLoaded, isSignedIn, user } = useUser();
@@ -46,6 +47,7 @@ export default function Flashcard() {
 
     return (
         <Container maxWidth="100vw">
+            <NavBar />
             <Grid container spacing={3} sx={{mt: 4}}>
             {/* {flashcards.length > 0 && (
                 <Box sx={{ mt: 4 }}>
@@ -53,7 +55,7 @@ export default function Flashcard() {
                     <Grid container spacing={3}> */}
                         {flashcards.map((flashcard, index) => (
                             <Grid item xs={12} sm={6} md={4} key={index}>
-                                <Card>
+                                <Card sx={{backgroundColor: '#B8DBD9', borderRadius: 2, }}>
                                     <CardActionArea onClick={() => handleCardClick(index)}>
                                         <CardContent>
                                             <Box sx={{
@@ -65,7 +67,9 @@ export default function Flashcard() {
                                                     width: '100%',
                                                     height: '200px',
                                                     boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
-                                                    transform: flipped[index] ? 'rotateY(180deg)' : 'rotateY(0deg)'
+                                                    transform: flipped[index] ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                                                    backgroundColor: '#D6E8E9',
+                                                    borderRadius: 2,
                                                 },
                                                 '& > div > div': {
                                                     position: 'absolute',
